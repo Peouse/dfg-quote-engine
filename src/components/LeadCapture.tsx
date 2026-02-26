@@ -22,15 +22,15 @@ const leadSchema = z.object({
     email: z.string().email("Formato de correo inválido"),
 });
 
-const PROFILE_OPTIONS: ProfileTag[] = ["Fleet Owner", "Spare Parts Store", "Mechanic", "Driver", "Other"];
+const PROFILE_OPTIONS: ProfileTag[] = ["Dueño de Flota", "Dueño de Tienda de Repuestos", "Mecánico", "Conductor", "Otro"];
 const INTEREST_OPTIONS: InterestTag[] = ["American", "European", "Asian", "Yellow Line (Heavy Equipment)", "All"];
 
 const PROFILE_LABELS: Record<ProfileTag, string> = {
-    "Fleet Owner": "Flotillero",
-    "Spare Parts Store": "Tienda de Repuestos",
-    "Mechanic": "Mecánico",
-    "Driver": "Conductor",
-    "Other": "Otro",
+    "Dueño de Flota": "Dueño de Flota",
+    "Dueño de Tienda de Repuestos": "Dueño de Tienda de Repuestos",
+    "Mecánico": "Mecánico",
+    "Conductor": "Conductor",
+    "Otro": "Otro",
     "": ""
 };
 

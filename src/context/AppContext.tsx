@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
-export type ProfileTag = "Fleet Owner" | "Spare Parts Store" | "Mechanic" | "Driver" | "Other" | "";
+export type ProfileTag = "Dueño de Flota" | "Dueño de Tienda de Repuestos" | "Mecánico" | "Conductor" | "Otro" | "";
 export type InterestTag = "American" | "European" | "Asian" | "Yellow Line (Heavy Equipment)" | "All";
 
 export interface LeadData {
@@ -55,22 +55,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
       const existing = prev.find((i) => i.id === item.id);
       if (existing) {
         return prev.map((i) =>
-          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+          i.id === item.id ? { ...i, quantity: i.quantity + 10 } : i
         );
       }
-      return [...prev, { ...item, quantity: 1 }];
+      return [...prev, { ...item, quantity: 10 }];
     });
   };
 
   const updateQuantity = (id: string, delta: number) => {
     setCart((prev) =>
-      prev.map((i) => {
-        if (i.id === id) {
-          const newQuantity = Math.max(1, i.quantity + delta);
-          return { ...i, quantity: newQuantity };
-        }
-        return i;
-      })
+      prev
+        .map((i) => (i.id === id ? { ...i, quantity: i.quantity + delta } : i))
+        .filter((i) => i.quantity > 0)
     );
   };
 

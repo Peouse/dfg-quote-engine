@@ -5,11 +5,11 @@ import { useState, useMemo, useRef, useEffect } from "react";
 import Fuse from "fuse.js";
 import { useAppContext } from "@/context/AppContext";
 import { MOCK_PRODUCTS, FAMILIES } from "@/data/mockProducts";
-import { Search, Menu, X, Plus, ShoppingCart, Check, Hexagon, Database } from "lucide-react";
+import { Search, Menu, X, Plus, Minus, ShoppingCart, Check, Hexagon, Database } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function InteractiveCatalog() {
-    const { setCurrentStep, cart, addToCart, removeFromCart } = useAppContext();
+    const { setCurrentStep, cart, addToCart, removeFromCart, updateQuantity } = useAppContext();
 
     const [activeFamily, setActiveFamily] = useState<string>(FAMILIES[0]);
     const [activeSubfamily, setActiveSubfamily] = useState<string | null>(null);
@@ -24,6 +24,15 @@ export default function InteractiveCatalog() {
             scrollRef.current.scrollTop = 0;
         }
     }, [activeFamily, activeSubfamily, searchQuery]);
+
+    // Force reset on mount just in case of stale state
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => {
+        setActiveFamily(FAMILIES[0]);
+        setActiveSubfamily(null);
+        setSearchQuery("");
+        if (scrollRef.current) scrollRef.current.scrollTop = 0;
+    }, []);
 
     // Fuse.js setup prioritizing OEM Code
     const fuse = useMemo(() => new Fuse(MOCK_PRODUCTS, {
@@ -212,7 +221,7 @@ export default function InteractiveCatalog() {
                                 <ShoppingCart size={20} />
                             </button>
                             {totalItems > 0 && (
-                                <span className="absolute -top-2 -right-2 bg-orange-500 text-white font-bold w-5 h-5 flex items-center justify-center border border-[#0a0a0a] shadow-[0_0_10px_rgba(249,115,22,0.5)] z-10 pointer-events-none">
+                                <span className="absolute -top-2 -right-2 bg-orange-500 text-white flex items-center justify-center border border-[#0a0a0a] shadow-[0_0_10px_rgba(249,115,22,0.5)] z-10 pointer-events-none font-bold min-w-[20px] h-5 px-1 text-[11px] whitespace-nowrap">
                                     {totalItems}
                                 </span>
                             )}
@@ -242,7 +251,7 @@ export default function InteractiveCatalog() {
                             <p>NO DATA FOUND FOR QUERY: &quot;{searchQuery}&quot;</p>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-6">
+                        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-2 md:gap-4 lg:gap-5 pb-24">
                             {displayedProducts.map(product => {
                                 const inCart = cart.some(item => item.id === product.id);
 
@@ -262,7 +271,7 @@ export default function InteractiveCatalog() {
                                         <div className="flex flex-col sm:flex-row items-stretch h-full relative z-0">
                                             {/* Image (Top/Left side) */}
                                             <div
-                                                className="w-full h-24 sm:h-auto sm:w-32 bg-white/50 relative shrink-0 cursor-pointer flex items-center justify-center border-b sm:border-b-0 sm:border-r border-zinc-100 overflow-hidden"
+                                                className="w-full h-24 sm:h-auto sm:w-28 bg-white/50 relative shrink-0 cursor-pointer flex items-center justify-center border-b sm:border-b-0 sm:border-r border-zinc-100 overflow-hidden min-h-[100px] sm:min-h-[120px]"
                                                 onClick={() => {
                                                     if (product.images && product.images.length > 0) setLightboxImage(product.images[0]);
                                                 }}
@@ -322,45 +331,52 @@ export default function InteractiveCatalog() {
                                                         ) : <div />}
                                                     </div>
 
-                                                    {/* Add to Cart Button */}
-                                                    <motion.button
-                                                        whileTap={{ scale: 0.95 }}
-                                                        onClick={() => {
-                                                            if (inCart) {
-                                                                removeFromCart(product.id);
-                                                            } else {
-                                                                addToCart({ id: product.id, oemCode: product.oemCode, description: product.description });
-                                                            }
-                                                        }}
-                                                        className={`w-12 h-12 rounded-full shrink-0 flex items-center justify-center transition-colors border overflow-hidden relative ${inCart
-                                                            ? "bg-blue-600/10 text-blue-600 border-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.2)]"
-                                                            : "bg-white text-zinc-500 border-zinc-200 hover:border-zinc-300 hover:text-zinc-900 hover:shadow-sm"
-                                                            }`}
-                                                    >
+                                                    {/* Add to Cart Button / Quantity */}
+                                                    <div className="flex items-center min-h-[44px]">
                                                         <AnimatePresence mode="wait">
-                                                            {inCart ? (
-                                                                <motion.div
-                                                                    key="check"
-                                                                    initial={{ opacity: 0, scale: 0.5, rotate: -45 }}
-                                                                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                                                                    exit={{ opacity: 0, scale: 0.5, rotate: 45 }}
-                                                                    transition={{ duration: 0.2 }}
-                                                                >
-                                                                    <Check size={20} />
-                                                                </motion.div>
-                                                            ) : (
-                                                                <motion.div
-                                                                    key="plus"
-                                                                    initial={{ opacity: 0, scale: 0.5, rotate: 45 }}
-                                                                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                                                                    exit={{ opacity: 0, scale: 0.5, rotate: -45 }}
-                                                                    transition={{ duration: 0.2 }}
+                                                            {!inCart ? (
+                                                                <motion.button
+                                                                    key="add-btn"
+                                                                    initial={{ opacity: 0, scale: 0.8 }}
+                                                                    animate={{ opacity: 1, scale: 1 }}
+                                                                    exit={{ opacity: 0, scale: 0.8 }}
+                                                                    transition={{ duration: 0.15 }}
+                                                                    whileTap={{ scale: 0.95 }}
+                                                                    onClick={() => addToCart({ id: product.id, oemCode: product.oemCode, description: product.description })}
+                                                                    className="w-10 h-10 md:w-11 md:h-11 rounded-full shrink-0 flex items-center justify-center transition-colors border overflow-hidden relative bg-white text-zinc-500 border-zinc-200 hover:border-zinc-300 hover:text-zinc-900 hover:shadow-sm"
                                                                 >
                                                                     <Plus size={20} />
+                                                                </motion.button>
+                                                            ) : (
+                                                                <motion.div
+                                                                    key="qty-ctrl"
+                                                                    initial={{ opacity: 0, width: 44 }}
+                                                                    animate={{ opacity: 1, width: "auto" }}
+                                                                    exit={{ opacity: 0, width: 44 }}
+                                                                    transition={{ duration: 0.2, ease: "easeOut" }}
+                                                                    className="flex items-center bg-blue-50 border border-blue-200 rounded-full h-10 md:h-11 shadow-[0_0_10px_rgba(59,130,246,0.1)] gap-1 px-1 overflow-hidden origin-right"
+                                                                >
+                                                                    <motion.button
+                                                                        whileTap={{ scale: 0.9 }}
+                                                                        onClick={() => updateQuantity(product.id, -10)}
+                                                                        className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center text-blue-600 hover:bg-blue-200 hover:text-blue-800 rounded-full transition-colors shrink-0"
+                                                                    >
+                                                                        <Minus size={14} />
+                                                                    </motion.button>
+                                                                    <div className="min-w-[16px] sm:min-w-[24px] text-center font-mono text-[11px] sm:text-xs font-bold text-blue-900 pointer-events-none shrink-0">
+                                                                        {cart.find(i => i.id === product.id)?.quantity || 10}
+                                                                    </div>
+                                                                    <motion.button
+                                                                        whileTap={{ scale: 0.9 }}
+                                                                        onClick={() => updateQuantity(product.id, 10)}
+                                                                        className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center text-blue-600 hover:bg-blue-200 hover:text-blue-800 rounded-full transition-colors shrink-0"
+                                                                    >
+                                                                        <Plus size={14} />
+                                                                    </motion.button>
                                                                 </motion.div>
                                                             )}
                                                         </AnimatePresence>
-                                                    </motion.button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

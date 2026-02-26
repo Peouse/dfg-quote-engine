@@ -127,7 +127,7 @@ export default function MyProforma() {
                                         {/* Quantity Controls */}
                                         <div className="flex items-center bg-zinc-50 border border-zinc-200 h-9 sm:h-10">
                                             <button
-                                                onClick={() => updateQuantity(item.id, -1)}
+                                                onClick={() => updateQuantity(item.id, -10)}
                                                 className="w-9 sm:w-10 h-full flex items-center justify-center text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 transition-colors active:bg-zinc-200"
                                             >
                                                 <Minus size={14} className="sm:w-4 sm:h-4" />
@@ -136,7 +136,7 @@ export default function MyProforma() {
                                                 {item.quantity}
                                             </div>
                                             <button
-                                                onClick={() => updateQuantity(item.id, 1)}
+                                                onClick={() => updateQuantity(item.id, 10)}
                                                 className="w-9 sm:w-10 h-full flex items-center justify-center text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 transition-colors active:bg-zinc-200"
                                             >
                                                 <Plus size={14} className="sm:w-4 sm:h-4" />
