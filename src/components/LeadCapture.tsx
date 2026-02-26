@@ -5,6 +5,8 @@ import { useState } from "react";
 import { z } from "zod";
 import { useAppContext, ProfileTag, InterestTag } from "@/context/AppContext";
 import { createClient } from "@supabase/supabase-js";
+import { ArrowRight, Hexagon } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Initialize Supabase client
 const supabase = createClient(
@@ -126,7 +128,7 @@ export default function LeadCapture() {
         } catch (err) {
             if (err instanceof z.ZodError) {
                 const newErrors: Record<string, string> = {};
-                (err as unknown as { errors: { path: (string | number)[]; message: string }[] }).errors.forEach((e) => {
+                err.issues.forEach((e) => {
                     if (e.path[0]) newErrors[e.path[0].toString()] = e.message;
                 });
                 setErrors(newErrors);
@@ -139,129 +141,232 @@ export default function LeadCapture() {
     };
 
     return (
-        <div className="flex flex-col h-full bg-white animate-in fade-in zoom-in-95 duration-300">
-            <div className="p-6 md:p-10 flex-1 overflow-y-auto no-scrollbar">
-                <div className="max-w-xl mx-auto space-y-8">
+        <div className="flex flex-col h-full bg-white animate-in fade-in zoom-in-95 duration-300 relative overflow-hidden">
+            {/* Background Grid */}
+            <div className="absolute inset-0 data-texture opacity-50 pointer-events-none"></div>
+
+            <div className="p-6 md:p-12 flex-1 overflow-y-auto no-scrollbar relative z-10">
+                <div className="max-w-2xl mx-auto space-y-10">
 
                     <div className="text-center space-y-4 flex flex-col items-center">
-                        <img src="/logo.png" alt="DFG Catalog Logo" className="h-16 w-auto object-contain" />
-                        <p className="text-gray-500">Ingresa tus datos para acceder al catálogo interactivo B2B.</p>
+                        <div className="flex items-center justify-center mb-2">
+                            <img src="/logo.png" alt="DFG Logo" className="h-16 object-contain" />
+                        </div>
+                        <p className="text-zinc-600 font-mono text-sm tracking-widest text-center px-4">
+                            Marca líder en repuestos para buses y vehículos pesados
+                        </p>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                    <form onSubmit={handleSubmit} className="space-y-8 bg-white/70 backdrop-blur-2xl border border-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-8 rounded-3xl relative">
 
                         {/* Fields */}
-                        <div className="space-y-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Nombre Completo</label>
-                                <input
-                                    type="text"
-                                    value={formData.fullName}
-                                    onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-900 transition-shadow bg-gray-50 focus:bg-white text-lg"
-                                    placeholder="Juan Pérez"
-                                />
-                                {errors.fullName && <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>}
+                        <div className="space-y-5 relative">
+                            <div className="relative">
+                                <label className={`block text-xs font-mono mb-2 uppercase tracking-wider transition-colors ${errors.fullName ? 'text-red-500 font-bold' : 'text-zinc-500'}`}>Nombre Completo</label>
+                                <div className="relative">
+                                    <input
+                                        type="text"
+                                        value={formData.fullName}
+                                        onChange={(e) => {
+                                            setFormData({ ...formData, fullName: e.target.value });
+                                            if (errors.fullName) setErrors({ ...errors, fullName: "" });
+                                        }}
+                                        className={`w-full py-2 bg-transparent border-x-0 border-t-0 border-b-2 ${errors.fullName ? 'border-red-500 focus:border-red-500' : 'border-zinc-200 focus:border-blue-500'} focus:ring-0 transition-all text-zinc-950 font-mono text-sm px-0 outline-none placeholder:text-zinc-400`}
+                                        placeholder="Juan Pérez"
+                                    />
+                                    <AnimatePresence>
+                                        {errors.fullName && (
+                                            <motion.span
+                                                initial={{ opacity: 0, x: 10 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                exit={{ opacity: 0, x: 10 }}
+                                                className="absolute right-0 top-1/2 -translate-y-1/2 text-[10px] sm:text-xs text-red-500 font-mono italic pointer-events-none"
+                                            >
+                                                {errors.fullName}
+                                            </motion.span>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
                             </div>
 
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Empresa (Opcional)</label>
+                            <div className="relative">
+                                <label className="block text-xs font-mono text-zinc-500 mb-2 uppercase tracking-wider">Empresa (Opcional)</label>
                                 <input
                                     type="text"
                                     value={formData.company}
                                     onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-900 transition-shadow bg-gray-50 focus:bg-white text-lg"
+                                    className="w-full py-2 bg-transparent border-x-0 border-t-0 border-b-2 border-zinc-200 focus:border-blue-500 focus:ring-0 transition-all text-zinc-950 font-mono text-sm px-0 outline-none placeholder:text-zinc-400"
                                     placeholder="Empresa S.A."
                                 />
                             </div>
 
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Correo Electrónico</label>
-                                <input
-                                    type="email"
-                                    value={formData.email}
-                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-900 transition-shadow bg-gray-50 focus:bg-white text-lg"
-                                    placeholder="juan@ejemplo.com"
-                                />
-                                {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+                            <div className="relative">
+                                <label className={`block text-xs font-mono mb-2 uppercase tracking-wider transition-colors ${errors.email ? 'text-red-500 font-bold' : 'text-zinc-500'}`}>Correo Electrónico</label>
+                                <div className="relative">
+                                    <input
+                                        type="email"
+                                        value={formData.email}
+                                        onChange={(e) => {
+                                            setFormData({ ...formData, email: e.target.value });
+                                            if (errors.email) setErrors({ ...errors, email: "" });
+                                        }}
+                                        className={`w-full py-2 bg-transparent border-x-0 border-t-0 border-b-2 ${errors.email ? 'border-red-500 focus:border-red-500' : 'border-zinc-200 focus:border-blue-500'} focus:ring-0 transition-all text-zinc-950 font-mono text-sm px-0 outline-none placeholder:text-zinc-400`}
+                                        placeholder="juan@ejemplo.com"
+                                    />
+                                    <AnimatePresence>
+                                        {errors.email && (
+                                            <motion.span
+                                                initial={{ opacity: 0, x: 10 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                exit={{ opacity: 0, x: 10 }}
+                                                className="absolute right-0 top-1/2 -translate-y-1/2 text-[10px] sm:text-xs text-red-500 font-mono italic pointer-events-none"
+                                            >
+                                                {errors.email}
+                                            </motion.span>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
                             </div>
 
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">WhatsApp</label>
-                                <div className="flex gap-2">
+                            <div className="relative">
+                                <label className={`block text-xs font-mono mb-2 uppercase tracking-wider transition-colors ${errors.whatsapp ? 'text-red-500 font-bold' : 'text-zinc-500'}`}>WhatsApp</label>
+                                <div className="flex gap-2 relative">
                                     <select
                                         value={formData.countryCode}
                                         onChange={(e) => setFormData({ ...formData, countryCode: e.target.value })}
-                                        className="w-24 px-2 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-900 bg-gray-50 focus:bg-white text-lg"
+                                        className={`w-20 py-2 bg-transparent border-x-0 border-t-0 border-b-2 ${errors.whatsapp ? 'border-red-500 focus:border-red-500 text-red-500' : 'border-zinc-200 focus:border-blue-500 text-zinc-950'} focus:ring-0 font-mono text-sm px-0 outline-none cursor-pointer`}
                                     >
-                                        <option value="+1">+1 (US)</option>
-                                        <option value="+51">+51 (PE)</option>
+                                        <option value="+1">+1</option>
+                                        <option value="+51">+51</option>
                                     </select>
-                                    <input
-                                        type="tel"
-                                        value={formData.whatsapp}
-                                        onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-                                        className="flex-1 px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-900 transition-shadow bg-gray-50 focus:bg-white text-lg"
-                                        placeholder="987654321"
-                                    />
+                                    <div className="relative flex-1">
+                                        <input
+                                            type="tel"
+                                            value={formData.whatsapp}
+                                            onChange={(e) => {
+                                                setFormData({ ...formData, whatsapp: e.target.value });
+                                                if (errors.whatsapp) setErrors({ ...errors, whatsapp: "" });
+                                            }}
+                                            className={`w-full py-2 bg-transparent border-x-0 border-t-0 border-b-2 ${errors.whatsapp ? 'border-red-500 focus:border-red-500' : 'border-zinc-200 focus:border-blue-500'} focus:ring-0 transition-all text-zinc-950 font-mono text-sm px-0 outline-none placeholder:text-zinc-400`}
+                                            placeholder="987654321"
+                                        />
+                                        <AnimatePresence>
+                                            {errors.whatsapp && (
+                                                <motion.span
+                                                    initial={{ opacity: 0, x: 10 }}
+                                                    animate={{ opacity: 1, x: 0 }}
+                                                    exit={{ opacity: 0, x: 10 }}
+                                                    className="absolute right-0 top-1/2 -translate-y-1/2 text-[10px] sm:text-xs text-red-500 font-mono italic pointer-events-none"
+                                                >
+                                                    {errors.whatsapp}
+                                                </motion.span>
+                                            )}
+                                        </AnimatePresence>
+                                    </div>
                                 </div>
-                                {errors.whatsapp && <p className="text-red-500 text-sm mt-1">{errors.whatsapp}</p>}
                             </div>
                         </div>
 
                         {/* Profile Tags */}
-                        <div className="pt-2">
-                            <label className="block text-sm font-medium text-gray-900 mb-3">¿Qué opción describe mejor tu perfil? (Selecciona una)</label>
-                            <div className="flex flex-wrap gap-2">
+                        <div className="pt-4 border-t border-zinc-200 relative">
+                            <label className={`block flex items-center justify-between text-xs font-mono mb-4 uppercase tracking-wider transition-colors ${errors.profileTag ? 'text-red-500 font-bold' : 'text-zinc-500'}`}>
+                                Perfil Operativo
+                                <AnimatePresence>
+                                    {errors.profileTag && (
+                                        <motion.span
+                                            initial={{ opacity: 0, x: 10 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{ opacity: 0, x: 10 }}
+                                            className="text-[10px] sm:text-xs text-red-500 font-mono italic normal-case"
+                                        >
+                                            {errors.profileTag}
+                                        </motion.span>
+                                    )}
+                                </AnimatePresence>
+                            </label>
+                            <div className="flex flex-wrap gap-2 sm:gap-3">
                                 {PROFILE_OPTIONS.map(tag => (
-                                    <button
+                                    <motion.button
+                                        layout
+                                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                        whileTap={{ scale: 0.95 }}
                                         key={tag}
                                         type="button"
-                                        onClick={() => setFormData({ ...formData, profileTag: tag })}
-                                        className={`px-4 py-2.5 rounded-full text-sm font-medium transition-colors border ${formData.profileTag === tag
-                                            ? "bg-gray-900 text-white border-gray-900"
-                                            : "bg-white text-gray-600 border-gray-200 hover:border-gray-900 hover:text-gray-900"
+                                        onClick={() => {
+                                            setFormData({ ...formData, profileTag: tag });
+                                            if (errors.profileTag) setErrors({ ...errors, profileTag: "" });
+                                        }}
+                                        className={`px-4 py-2 text-[10px] sm:text-xs font-mono uppercase tracking-wider rounded-full border transition-colors ${formData.profileTag === tag
+                                            ? "bg-zinc-950 text-white border-zinc-950 shadow-md"
+                                            : "bg-white/50 text-zinc-600 border-zinc-200 hover:border-zinc-400 hover:bg-white"
                                             }`}
                                     >
                                         {PROFILE_LABELS[tag]}
-                                    </button>
+                                    </motion.button>
                                 ))}
                             </div>
-                            {errors.profileTag && <p className="text-red-500 text-sm mt-2">{errors.profileTag}</p>}
                         </div>
 
                         {/* Interest Tags */}
-                        <div className="pt-2">
-                            <label className="block text-sm font-medium text-gray-900 mb-3">¿Qué líneas de productos te interesan? (Selecciona varias)</label>
-                            <div className="flex flex-wrap gap-2">
+                        <div className="pt-4 border-t border-zinc-200 relative">
+                            <label className={`block flex items-center justify-between text-xs font-mono mb-4 uppercase tracking-wider transition-colors ${errors.interestTags ? 'text-red-500 font-bold' : 'text-zinc-500'}`}>
+                                Vectores de Interés
+                                <AnimatePresence>
+                                    {errors.interestTags && (
+                                        <motion.span
+                                            initial={{ opacity: 0, x: 10 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{ opacity: 0, x: 10 }}
+                                            className="text-[10px] sm:text-xs text-red-500 font-mono italic normal-case text-right ml-2"
+                                        >
+                                            {errors.interestTags}
+                                        </motion.span>
+                                    )}
+                                </AnimatePresence>
+                            </label>
+                            <div className="flex flex-wrap gap-2 sm:gap-3">
                                 {INTEREST_OPTIONS.map(tag => (
-                                    <button
+                                    <motion.button
+                                        layout
+                                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                        whileTap={{ scale: 0.95 }}
                                         key={tag}
                                         type="button"
-                                        onClick={() => toggleInterest(tag)}
-                                        className={`px-4 py-2.5 rounded-full text-sm font-medium transition-colors border ${formData.interestTags.includes(tag)
-                                            ? "bg-gray-900 text-white border-gray-900"
-                                            : "bg-white text-gray-600 border-gray-200 hover:border-gray-900 hover:text-gray-900"
+                                        onClick={() => {
+                                            toggleInterest(tag);
+                                            if (errors.interestTags) setErrors({ ...errors, interestTags: "" });
+                                        }}
+                                        className={`px-4 py-2 text-[10px] sm:text-xs font-mono uppercase tracking-wider rounded-full border transition-colors ${formData.interestTags.includes(tag)
+                                            ? "bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-500/20"
+                                            : "bg-white/50 text-zinc-600 border-zinc-200 hover:border-zinc-400 hover:bg-white"
                                             }`}
                                     >
                                         {INTEREST_LABELS[tag]}
-                                    </button>
+                                    </motion.button>
                                 ))}
                             </div>
-                            {errors.interestTags && <p className="text-red-500 text-sm mt-2">{errors.interestTags}</p>}
                         </div>
 
                         {/* Submit */}
-                        <div className="pt-6 pb-8">
-                            <button
+                        <div className="pt-6">
+                            <motion.button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="w-full bg-gray-900 text-white font-semibold text-lg py-4 rounded-xl hover:bg-gray-800 transition-colors active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2"
+                                whileTap={{ scale: 0.98 }}
+                                className="w-full bg-zinc-950 text-white font-mono uppercase tracking-widest text-sm py-4 rounded-xl transition-all disabled:opacity-50 flex items-center justify-center gap-3 relative overflow-hidden group shadow-lg"
                             >
-                                {isSubmitting ? "Guardando..." : "Entrar al Catálogo Interactivo"}
-                                {!isSubmitting && <span className="text-xl">→</span>}
-                            </button>
+                                <span className="relative z-10 flex items-center gap-2">
+                                    {isSubmitting ? "Autenticando..." : "Inicializar Catálogo"}
+                                    {!isSubmitting && <ArrowRight size={16} />}
+                                </span>
+                                {/* Shimmer Effect */}
+                                <motion.div
+                                    initial={{ x: "-100%" }}
+                                    whileHover={{ x: "200%" }}
+                                    transition={{ duration: 1, ease: "easeInOut", repeat: Infinity }}
+                                    className="absolute inset-y-0 -inset-x-full w-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12 z-0"
+                                />
+                            </motion.button>
                         </div>
 
                     </form>

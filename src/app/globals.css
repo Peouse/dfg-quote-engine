@@ -3,16 +3,14 @@
 @theme {
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  
-  --color-background: #ffffff;
-  --color-foreground: #111827;
-  --color-divider: #e5e7eb;
 }
 
 @layer base {
   body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
+    background-color: #fafafa;
+    /* zinc-50 */
+    color: #09090b;
+    /* zinc-950 */
     @apply antialiased font-sans;
   }
 }
@@ -22,8 +20,26 @@
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
+
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+
+  .data-texture {
+    background-image: radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  .glow-border {
+    box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.3), 0 0 12px rgba(59, 130, 246, 0.1);
+  }
+
+  .glow-border:hover {
+    box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.6), 0 0 20px rgba(59, 130, 246, 0.2);
+  }
+
+  .sharp-corner {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
   }
 }
