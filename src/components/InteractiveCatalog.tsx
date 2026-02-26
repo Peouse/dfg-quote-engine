@@ -268,10 +268,10 @@ export default function InteractiveCatalog() {
                                         <div className="absolute top-0 left-0 w-1.5 h-1.5 border-t border-l border-zinc-400 group-hover:border-blue-500 transition-colors z-10"></div>
                                         <div className="absolute bottom-0 right-0 w-1.5 h-1.5 border-b border-r border-zinc-400 group-hover:border-blue-500 transition-colors z-10"></div>
 
-                                        <div className="flex flex-col sm:flex-row items-stretch h-full relative z-0">
-                                            {/* Image (Top/Left side) */}
+                                        <div className="flex flex-col items-stretch h-full relative z-0">
+                                            {/* Image (Top side) */}
                                             <div
-                                                className="w-full h-24 sm:h-auto sm:w-28 bg-white/50 relative shrink-0 cursor-pointer flex items-center justify-center border-b sm:border-b-0 sm:border-r border-zinc-100 overflow-hidden min-h-[100px] sm:min-h-[120px]"
+                                                className="w-full h-32 sm:h-40 bg-white/50 relative shrink-0 cursor-pointer flex items-center justify-center border-b border-zinc-100 overflow-hidden"
                                                 onClick={() => {
                                                     if (product.images && product.images.length > 0) setLightboxImage(product.images[0]);
                                                 }}
