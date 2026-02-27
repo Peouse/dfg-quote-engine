@@ -13,11 +13,11 @@ export default function Home() {
     <main className="min-h-screen bg-zinc-50 text-zinc-950 font-sans sm:p-4 lg:p-8 flex flex-col items-center justify-center data-texture relative">
       <div className="absolute inset-0 bg-gradient-to-b from-zinc-200/50 to-transparent pointer-events-none"></div>
 
-      <div className="w-full max-w-7xl shadow-xl sm:border border-zinc-200 bg-white min-h-[100dvh] sm:min-h-[85vh] relative z-10 flex flex-col flex-grow">
+      <div className="w-full max-w-7xl shadow-xl sm:border border-zinc-200 bg-white min-h-[100dvh] sm:min-h-[85vh] relative z-10 flex flex-col flex-grow overflow-x-hidden">
         {/* Top Accent Line */}
         <div className="absolute top-0 left-0 w-full h-[2px] bg-blue-600"></div>
 
-        <div className="flex-1 flex flex-col relative pb-10">
+        <div className="flex-1 flex flex-col relative pb-10 min-w-0">
           {currentStep === 1 && <LeadCapture />}
           {currentStep === 2 && <InteractiveCatalog />}
           {currentStep === 3 && <MyProforma />}

@@ -65,7 +65,7 @@ export default function InteractiveCatalog() {
     }, [activeFamily]);
 
     return (
-        <div className="flex h-[100dvh] sm:h-[85vh] relative bg-white overflow-hidden">
+        <div className="flex w-full h-[100dvh] sm:h-[85vh] relative bg-white overflow-hidden">
 
             {/* Tablet/Desktop Sidebar (20%) */}
             <div className="hidden md:flex flex-col w-[22%] min-w-[240px] border-r border-zinc-200 bg-zinc-50 h-full relative z-10">
@@ -188,16 +188,16 @@ export default function InteractiveCatalog() {
             </AnimatePresence>
 
             {/* Main Content Area */}
-            <div className="flex-1 flex flex-col h-full bg-slate-50 relative">
+            <div className="flex-1 flex flex-col h-full bg-slate-50 relative min-w-0">
                 {/* Background Grid */}
                 <div className="absolute inset-0 data-texture opacity-20 pointer-events-none"></div>
 
                 {/* Sticky Header */}
                 <header className="sticky top-0 z-20 bg-white/70 backdrop-blur-xl supports-[backdrop-filter]:bg-white/50 border-b border-white/20 shadow-sm p-4 flex flex-col gap-4">
                     <div className="flex items-center justify-between gap-4">
-                        <div className="flex items-center gap-3 flex-1">
+                        <div className="flex items-center gap-3 flex-1 min-w-0">
                             <button
-                                className="md:hidden p-2 -ml-2 text-zinc-500 hover:text-zinc-900"
+                                className="md:hidden p-2 -ml-2 text-zinc-500 hover:text-zinc-900 shrink-0"
                                 onClick={() => setIsDrawerOpen(true)}
                             >
                                 <Menu size={24} />
@@ -206,14 +206,14 @@ export default function InteractiveCatalog() {
                                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500" size={18} />
                                 <input
                                     type="text"
-                                    placeholder="BUSCAR CÓDIGO OEM O DESCRIPCIÓN..."
+                                    placeholder="BUSCAR OEM O DESCRIPCIÓN..."
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     className="w-full pl-12 pr-4 py-3 bg-white/60 backdrop-blur-sm border border-white/40 shadow-inner focus:border-blue-500 focus:bg-white focus:ring-1 focus:ring-blue-500 transition-all outline-none text-zinc-900 font-mono text-base sm:text-sm text-ellipsis placeholder:text-gray-500 rounded-sm"
                                 />
                             </div>
                         </div>
-                        <div className="relative mt-1 mr-1">
+                        <div className="relative mt-1 mr-1 shrink-0">
                             <button
                                 onClick={() => setCurrentStep(3)}
                                 className="relative p-3 bg-blue-600/90 backdrop-blur-md shadow-lg shadow-blue-500/20 text-white hover:bg-blue-600 transition-colors sharp-corner flex-shrink-0 border border-blue-400/50"
@@ -228,15 +228,15 @@ export default function InteractiveCatalog() {
                         </div>
                     </div>
                     {!searchQuery && (
-                        <div className="text-[10px] sm:text-xs font-mono text-zinc-500 flex flex-wrap items-center gap-x-2 gap-y-1 uppercase tracking-widest mt-1 sm:mt-0">
+                        <div className="text-[10px] sm:text-xs font-mono text-zinc-500 flex items-center gap-x-2 gap-y-1 uppercase tracking-widest mt-1 sm:mt-0 min-w-0 w-full overflow-hidden">
                             <Database size={12} className="text-blue-500 shrink-0" />
                             <span className="shrink-0">Catalog</span>
                             <span className="text-gray-700 shrink-0">/</span>
-                            <span className={`break-words ${!activeSubfamily ? "text-gray-300" : ""}`}>{activeFamily}</span>
+                            <span className={`truncate min-w-0 shrink ${!activeSubfamily ? "text-gray-300" : ""}`}>{activeFamily}</span>
                             {activeSubfamily && (
                                 <>
                                     <span className="text-gray-700 shrink-0">/</span>
-                                    <span className="text-blue-400 break-words">{activeSubfamily}</span>
+                                    <span className="text-blue-400 truncate min-w-0 shrink">{activeSubfamily}</span>
                                 </>
                             )}
                         </div>
