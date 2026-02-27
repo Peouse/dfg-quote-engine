@@ -251,7 +251,7 @@ export default function InteractiveCatalog() {
                             <p>NO DATA FOUND FOR QUERY: &quot;{searchQuery}&quot;</p>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-2 md:gap-4 lg:gap-5 pb-24">
+                        <div className="flex flex-col gap-3 md:gap-4 pb-24 max-w-4xl mx-auto w-full">
                             {displayedProducts.map(product => {
                                 const inCart = cart.some(item => item.id === product.id);
 
@@ -262,123 +262,108 @@ export default function InteractiveCatalog() {
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.3 }}
                                         key={product.id}
-                                        className="bg-white/80 backdrop-blur-sm shadow-sm border border-white/40 flex flex-col transition-all hover:shadow-md hover:border-blue-200 group relative rounded-md overflow-hidden"
+                                        className="bg-white/60 backdrop-blur-xl shadow-sm border border-white/50 flex flex-row items-center transition-all hover:shadow-md hover:bg-white/80 hover:border-blue-300 group relative rounded-2xl overflow-hidden p-2 sm:p-3 gap-3 sm:gap-5 w-full"
                                     >
-                                        {/* Corner accents */}
-                                        <div className="absolute top-0 left-0 w-1.5 h-1.5 border-t border-l border-zinc-400 group-hover:border-blue-500 transition-colors z-10"></div>
-                                        <div className="absolute bottom-0 right-0 w-1.5 h-1.5 border-b border-r border-zinc-400 group-hover:border-blue-500 transition-colors z-10"></div>
-
-                                        <div className="flex flex-col items-stretch h-full relative z-0">
-                                            {/* Image (Top side) */}
-                                            <div
-                                                className="w-full h-32 sm:h-40 bg-white/50 relative shrink-0 cursor-pointer flex items-center justify-center border-b border-zinc-100 overflow-hidden"
-                                                onClick={() => {
-                                                    if (product.images && product.images.length > 0) setLightboxImage(product.images[0]);
-                                                }}
-                                            >
-                                                {product.images && product.images.length > 0 ? (
-                                                    <>
+                                        {/* Image (Left side) */}
+                                        <div
+                                            className="w-20 h-20 sm:w-28 sm:h-28 bg-white/60 relative shrink-0 cursor-pointer flex items-center justify-center border border-zinc-100/50 rounded-xl overflow-hidden"
+                                            onClick={() => {
+                                                if (product.images && product.images.length > 0) setLightboxImage(product.images[0]);
+                                            }}
+                                        >
+                                            {product.images && product.images.length > 0 ? (
+                                                <>
+                                                    <img
+                                                        src={product.images[0]}
+                                                        alt={product.description}
+                                                        className={`w-full h-full object-contain p-2 sm:p-3 transition-all duration-500 ${product.images.length > 1 ? 'group-hover:opacity-0 absolute inset-0' : 'group-hover:scale-110'}`}
+                                                    />
+                                                    {product.images.length > 1 && (
                                                         <img
-                                                            src={product.images[0]}
-                                                            alt={product.description}
-                                                            className={`w-full h-full object-contain p-2 sm:p-3 transition-all duration-500 ${product.images.length > 1 ? 'group-hover:opacity-0 absolute inset-0' : 'group-hover:scale-110'}`}
+                                                            src={product.images[1]}
+                                                            alt={`${product.description} alternate view`}
+                                                            className="w-full h-full object-contain p-2 sm:p-3 opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500 absolute inset-0"
                                                         />
-                                                        {product.images.length > 1 && (
-                                                            <img
-                                                                src={product.images[1]}
-                                                                alt={`${product.description} alternate view`}
-                                                                className="w-full h-full object-contain p-2 sm:p-3 opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500 absolute inset-0"
-                                                            />
-                                                        )}
-                                                    </>
-                                                ) : (
-                                                    <div className="w-full h-full flex items-center justify-center text-gray-700">
-                                                        <span className="text-[10px] font-mono uppercase tracking-widest">No Img</span>
-                                                    </div>
+                                                    )}
+                                                </>
+                                            ) : (
+                                                <div className="w-full h-full flex items-center justify-center text-gray-500">
+                                                    <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-widest">No Img</span>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {/* Details (Middle) */}
+                                        <div className="flex flex-col flex-1 min-w-0 justify-center py-1">
+                                            <div className="flex items-center gap-2 mb-1 sm:mb-1.5 min-h-[1.25rem]">
+                                                {product.linea && (
+                                                    <span className="text-[9px] sm:text-[10px] font-mono bg-blue-100/50 text-blue-700 px-2 py-0.5 rounded-md uppercase tracking-wider border border-blue-200/50">
+                                                        {product.linea}
+                                                    </span>
+                                                )}
+                                                {product.aplicacion && (
+                                                    <span className="text-[9px] sm:text-[10px] text-zinc-500 truncate block font-mono" title={product.aplicacion}>
+                                                        {product.aplicacion}
+                                                    </span>
                                                 )}
                                             </div>
 
-                                            {/* Details (Bottom/Right side) */}
-                                            <div className="p-3 sm:p-4 flex flex-col flex-1 min-w-0 justify-between bg-white/40">
-                                                <div>
-                                                    <div className="flex justify-between items-start mb-2 min-h-[1.25rem]">
-                                                        {product.linea ? (
-                                                            <span className="text-[8px] sm:text-[9px] font-mono bg-blue-50 text-blue-700 px-2 py-0.5 sm:py-1 uppercase tracking-wider border border-blue-200 rounded-sm">
-                                                                {product.linea}
-                                                            </span>
-                                                        ) : <div />}
-                                                    </div>
+                                            {/* OEM CODE */}
+                                            <h3 className="text-sm sm:text-lg font-bold text-zinc-900 tracking-tight leading-none mb-1 truncate font-mono">
+                                                {product.oemCode}
+                                            </h3>
 
-                                                    {/* OEM CODE */}
-                                                    <h3 className="text-sm sm:text-lg font-bold text-zinc-900 tracking-tight leading-none mb-1 sm:mb-2 truncate font-mono">
-                                                        {product.oemCode}
-                                                    </h3>
+                                            {/* Description */}
+                                            <p className="text-[10px] sm:text-xs text-zinc-600 line-clamp-2 leading-relaxed">
+                                                {product.description}
+                                            </p>
+                                        </div>
 
-                                                    {/* Description */}
-                                                    <p className="text-[10px] sm:text-xs text-zinc-500 line-clamp-2 mb-2 sm:mb-3 leading-relaxed">
-                                                        {product.description}
-                                                    </p>
-                                                </div>
-
-                                                <div className="mt-auto flex items-end justify-between gap-3 pt-3 border-t border-zinc-200/50">
-                                                    {/* Aplicacion Detail */}
-                                                    <div className="flex-1 min-w-0">
-                                                        {product.aplicacion ? (
-                                                            <p className="text-[9px] sm:text-[10px] text-zinc-500 line-clamp-1 truncate block font-mono" title={product.aplicacion}>
-                                                                <span className="text-gray-600 mr-1">APP:</span>
-                                                                {product.aplicacion}
-                                                            </p>
-                                                        ) : <div />}
-                                                    </div>
-
-                                                    {/* Add to Cart Button / Quantity */}
-                                                    <div className="flex items-center min-h-[44px]">
-                                                        <AnimatePresence mode="wait">
-                                                            {!inCart ? (
-                                                                <motion.button
-                                                                    key="add-btn"
-                                                                    initial={{ opacity: 0, scale: 0.8 }}
-                                                                    animate={{ opacity: 1, scale: 1 }}
-                                                                    exit={{ opacity: 0, scale: 0.8 }}
-                                                                    transition={{ duration: 0.15 }}
-                                                                    whileTap={{ scale: 0.95 }}
-                                                                    onClick={() => addToCart({ id: product.id, oemCode: product.oemCode, description: product.description })}
-                                                                    className="w-10 h-10 md:w-11 md:h-11 rounded-full shrink-0 flex items-center justify-center transition-colors border overflow-hidden relative bg-white text-zinc-500 border-zinc-200 hover:border-zinc-300 hover:text-zinc-900 hover:shadow-sm"
-                                                                >
-                                                                    <Plus size={20} />
-                                                                </motion.button>
-                                                            ) : (
-                                                                <motion.div
-                                                                    key="qty-ctrl"
-                                                                    initial={{ opacity: 0, width: 44 }}
-                                                                    animate={{ opacity: 1, width: "auto" }}
-                                                                    exit={{ opacity: 0, width: 44 }}
-                                                                    transition={{ duration: 0.2, ease: "easeOut" }}
-                                                                    className="flex items-center bg-blue-50 border border-blue-200 rounded-full h-10 md:h-11 shadow-[0_0_10px_rgba(59,130,246,0.1)] gap-1 px-1 overflow-hidden origin-right"
-                                                                >
-                                                                    <motion.button
-                                                                        whileTap={{ scale: 0.9 }}
-                                                                        onClick={() => updateQuantity(product.id, -10)}
-                                                                        className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center text-blue-600 hover:bg-blue-200 hover:text-blue-800 rounded-full transition-colors shrink-0"
-                                                                    >
-                                                                        <Minus size={14} />
-                                                                    </motion.button>
-                                                                    <div className="min-w-[16px] sm:min-w-[24px] text-center font-mono text-[11px] sm:text-xs font-bold text-blue-900 pointer-events-none shrink-0">
-                                                                        {cart.find(i => i.id === product.id)?.quantity || 10}
-                                                                    </div>
-                                                                    <motion.button
-                                                                        whileTap={{ scale: 0.9 }}
-                                                                        onClick={() => updateQuantity(product.id, 10)}
-                                                                        className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center text-blue-600 hover:bg-blue-200 hover:text-blue-800 rounded-full transition-colors shrink-0"
-                                                                    >
-                                                                        <Plus size={14} />
-                                                                    </motion.button>
-                                                                </motion.div>
-                                                            )}
-                                                        </AnimatePresence>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        {/* Add to Cart Button / Quantity (Right side) */}
+                                        <div className="flex items-center justify-end shrink-0 min-w-[44px] min-h-[44px] mr-1 sm:mr-2">
+                                            <AnimatePresence mode="wait">
+                                                {!inCart ? (
+                                                    <motion.button
+                                                        key="add-btn"
+                                                        initial={{ opacity: 0, scale: 0.8 }}
+                                                        animate={{ opacity: 1, scale: 1 }}
+                                                        exit={{ opacity: 0, scale: 0.8 }}
+                                                        transition={{ duration: 0.15 }}
+                                                        whileTap={{ scale: 0.95 }}
+                                                        onClick={() => addToCart({ id: product.id, oemCode: product.oemCode, description: product.description })}
+                                                        className="w-10 h-10 md:w-11 md:h-11 rounded-full shrink-0 flex items-center justify-center transition-all bg-white/80 text-zinc-600 border border-zinc-200/80 hover:border-zinc-300 hover:text-zinc-900 shadow-sm hover:shadow"
+                                                    >
+                                                        <Plus size={20} />
+                                                    </motion.button>
+                                                ) : (
+                                                    <motion.div
+                                                        key="qty-ctrl"
+                                                        initial={{ opacity: 0, width: 44 }}
+                                                        animate={{ opacity: 1, width: "auto" }}
+                                                        exit={{ opacity: 0, width: 44 }}
+                                                        transition={{ duration: 0.2, ease: "easeOut" }}
+                                                        className="flex items-center bg-blue-50/80 backdrop-blur border border-blue-200/80 rounded-full h-10 md:h-11 shadow-[0_0_10px_rgba(59,130,246,0.15)] gap-1 px-1 overflow-hidden origin-right"
+                                                    >
+                                                        <motion.button
+                                                            whileTap={{ scale: 0.9 }}
+                                                            onClick={() => updateQuantity(product.id, -10)}
+                                                            className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center text-blue-600 hover:bg-blue-200/80 hover:text-blue-800 rounded-full transition-colors shrink-0"
+                                                        >
+                                                            <Minus size={14} />
+                                                        </motion.button>
+                                                        <div className="min-w-[16px] sm:min-w-[24px] text-center font-mono text-[11px] sm:text-xs font-bold text-blue-900 pointer-events-none shrink-0">
+                                                            {cart.find(i => i.id === product.id)?.quantity || 10}
+                                                        </div>
+                                                        <motion.button
+                                                            whileTap={{ scale: 0.9 }}
+                                                            onClick={() => updateQuantity(product.id, 10)}
+                                                            className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center text-blue-600 hover:bg-blue-200/80 hover:text-blue-800 rounded-full transition-colors shrink-0"
+                                                        >
+                                                            <Plus size={14} />
+                                                        </motion.button>
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
                                         </div>
                                     </motion.div>
                                 )

@@ -234,10 +234,10 @@ export default function LeadCapture() {
                                     <select
                                         value={formData.countryCode}
                                         onChange={(e) => setFormData({ ...formData, countryCode: e.target.value })}
-                                        className={`w-20 py-2 bg-transparent border-x-0 border-t-0 border-b-2 ${errors.whatsapp ? 'border-red-500 focus:border-red-500 text-red-500' : 'border-zinc-200 focus:border-blue-500 text-zinc-950'} focus:ring-0 font-mono text-sm px-0 outline-none cursor-pointer`}
+                                        className={`w-24 py-2 bg-transparent border-x-0 border-t-0 border-b-2 ${errors.whatsapp ? 'border-red-500 focus:border-red-500 text-red-500' : 'border-zinc-200 focus:border-blue-500 text-zinc-950'} focus:ring-0 font-mono text-sm px-0 outline-none cursor-pointer`}
                                     >
-                                        <option value="+1">+1</option>
-                                        <option value="+51">+51</option>
+                                        <option value="+1">🇺🇸 +1</option>
+                                        <option value="+51">🇵🇪 +51</option>
                                     </select>
                                     <div className="relative flex-1">
                                         <input
