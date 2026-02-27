@@ -171,7 +171,7 @@ export default function LeadCapture() {
                                             setFormData({ ...formData, fullName: e.target.value });
                                             if (errors.fullName) setErrors({ ...errors, fullName: "" });
                                         }}
-                                        className={`w-full py-2 bg-transparent border-x-0 border-t-0 border-b-2 ${errors.fullName ? 'border-red-500 focus:border-red-500' : 'border-zinc-200 focus:border-blue-500'} focus:ring-0 transition-all text-zinc-950 font-mono text-sm px-0 outline-none placeholder:text-zinc-400`}
+                                        className={`w-full py-2 bg-transparent border-x-0 border-t-0 border-b-2 ${errors.fullName ? 'border-red-500 focus:border-red-500' : 'border-zinc-200 focus:border-blue-500'} focus:ring-0 transition-all text-zinc-950 font-mono text-base sm:text-sm px-0 outline-none placeholder:text-zinc-400`}
                                         placeholder="Juan Pérez"
                                     />
                                     <AnimatePresence>
@@ -195,7 +195,7 @@ export default function LeadCapture() {
                                     type="text"
                                     value={formData.company}
                                     onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                                    className="w-full py-2 bg-transparent border-x-0 border-t-0 border-b-2 border-zinc-200 focus:border-blue-500 focus:ring-0 transition-all text-zinc-950 font-mono text-sm px-0 outline-none placeholder:text-zinc-400"
+                                    className="w-full py-2 bg-transparent border-x-0 border-t-0 border-b-2 border-zinc-200 focus:border-blue-500 focus:ring-0 transition-all text-zinc-950 font-mono text-base sm:text-sm px-0 outline-none placeholder:text-zinc-400"
                                     placeholder="Empresa S.A."
                                 />
                             </div>
@@ -210,7 +210,7 @@ export default function LeadCapture() {
                                             setFormData({ ...formData, email: e.target.value });
                                             if (errors.email) setErrors({ ...errors, email: "" });
                                         }}
-                                        className={`w-full py-2 bg-transparent border-x-0 border-t-0 border-b-2 ${errors.email ? 'border-red-500 focus:border-red-500' : 'border-zinc-200 focus:border-blue-500'} focus:ring-0 transition-all text-zinc-950 font-mono text-sm px-0 outline-none placeholder:text-zinc-400`}
+                                        className={`w-full py-2 bg-transparent border-x-0 border-t-0 border-b-2 ${errors.email ? 'border-red-500 focus:border-red-500' : 'border-zinc-200 focus:border-blue-500'} focus:ring-0 transition-all text-zinc-950 font-mono text-base sm:text-sm px-0 outline-none placeholder:text-zinc-400`}
                                         placeholder="juan@ejemplo.com"
                                     />
                                     <AnimatePresence>
@@ -230,11 +230,11 @@ export default function LeadCapture() {
 
                             <div className="relative">
                                 <label className={`block text-xs font-mono mb-2 uppercase tracking-wider transition-colors ${errors.whatsapp ? 'text-red-500 font-bold' : 'text-zinc-500'}`}>WhatsApp</label>
-                                <div className="flex gap-2 relative">
+                                <div className={`flex items-center gap-2 relative border-b-2 transition-colors ${errors.whatsapp ? 'border-red-500' : 'border-zinc-200 focus-within:border-blue-500'}`}>
                                     <select
                                         value={formData.countryCode}
                                         onChange={(e) => setFormData({ ...formData, countryCode: e.target.value })}
-                                        className={`w-24 py-2 bg-transparent border-x-0 border-t-0 border-b-2 ${errors.whatsapp ? 'border-red-500 focus:border-red-500 text-red-500' : 'border-zinc-200 focus:border-blue-500 text-zinc-950'} focus:ring-0 font-mono text-sm px-0 outline-none cursor-pointer`}
+                                        className={`w-28 h-10 bg-transparent border-none ${errors.whatsapp ? 'text-red-500' : 'text-zinc-950'} focus:ring-0 font-mono text-base sm:text-sm px-0 outline-none cursor-pointer`}
                                     >
                                         <option value="+1">🇺🇸 +1</option>
                                         <option value="+51">🇵🇪 +51</option>
@@ -247,7 +247,7 @@ export default function LeadCapture() {
                                                 setFormData({ ...formData, whatsapp: e.target.value });
                                                 if (errors.whatsapp) setErrors({ ...errors, whatsapp: "" });
                                             }}
-                                            className={`w-full py-2 bg-transparent border-x-0 border-t-0 border-b-2 ${errors.whatsapp ? 'border-red-500 focus:border-red-500' : 'border-zinc-200 focus:border-blue-500'} focus:ring-0 transition-all text-zinc-950 font-mono text-sm px-0 outline-none placeholder:text-zinc-400`}
+                                            className="w-full h-10 bg-transparent border-none focus:ring-0 transition-all text-zinc-950 font-mono text-base sm:text-sm px-0 outline-none placeholder:text-zinc-400"
                                             placeholder="987654321"
                                         />
                                         <AnimatePresence>

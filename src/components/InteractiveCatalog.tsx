@@ -202,14 +202,14 @@ export default function InteractiveCatalog() {
                             >
                                 <Menu size={24} />
                             </button>
-                            <div className="relative flex-1 max-w-xl">
+                            <div className="relative flex-1 min-w-0 max-w-xl">
                                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500" size={18} />
                                 <input
                                     type="text"
                                     placeholder="BUSCAR CÓDIGO OEM O DESCRIPCIÓN..."
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="w-full pl-12 pr-4 py-3 bg-white/60 backdrop-blur-sm border border-white/40 shadow-inner focus:border-blue-500 focus:bg-white focus:ring-1 focus:ring-blue-500 transition-all outline-none text-zinc-900 font-mono text-sm placeholder-gray-500 rounded-sm"
+                                    className="w-full pl-12 pr-4 py-3 bg-white/60 backdrop-blur-sm border border-white/40 shadow-inner focus:border-blue-500 focus:bg-white focus:ring-1 focus:ring-blue-500 transition-all outline-none text-zinc-900 font-mono text-base sm:text-sm text-ellipsis placeholder:text-gray-500 rounded-sm"
                                 />
                             </div>
                         </div>
