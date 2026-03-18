@@ -2,7 +2,6 @@
 
 import { useAppContext } from "@/context/AppContext";
 import { CheckCircle2, RotateCcw } from "lucide-react";
-import { QRCodeSVG } from "qrcode.react";
 
 export default function HandoffSuccess() {
     const { proformaId, setLeadData } = useAppContext();
@@ -41,28 +40,14 @@ export default function HandoffSuccess() {
                 <div className="text-center space-y-4 mb-10">
                     <h1 className="text-2xl font-mono font-bold text-zinc-950 tracking-widest uppercase">Registro Exitoso</h1>
                     <p className="text-sm text-zinc-500 font-mono leading-relaxed">
-                        Datos transmitidos correctamente. Presenta este código QR a un agente en counter para finalizar la transacción.
+                        Datos transmitidos correctamente. El agente en counter procesará tu solicitud en breve.
                     </p>
                 </div>
-
-                {/* QR Code Container */}
-                <div className="bg-white p-6 border-4 border-zinc-200 shadow-[0_0_30px_rgba(59,130,246,0.15)] mb-12 relative group">
-                    {/* Tech corners */}
-                    <div className="absolute -top-1 -left-1 w-3 h-3 border-t-2 border-l-2 border-blue-500"></div>
-                    <div className="absolute -top-1 -right-1 w-3 h-3 border-t-2 border-r-2 border-blue-500"></div>
-                    <div className="absolute -bottom-1 -left-1 w-3 h-3 border-b-2 border-l-2 border-blue-500"></div>
-                    <div className="absolute -bottom-1 -right-1 w-3 h-3 border-b-2 border-r-2 border-blue-500"></div>
-
-                    <QRCodeSVG
-                        value={proformaId || "placeholder-id"}
-                        size={220}
-                        bgColor={"#ffffff"}
-                        fgColor={"#09090b"}
-                        level={"H"}
-                    />
-                    <div className="mt-4 pt-4 border-t border-gray-200 flex justify-between items-center">
-                        <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest">ID de Sesión</span>
-                        <span className="text-xs text-zinc-950 font-mono font-bold tracking-widest break-all">
+                
+                <div className="bg-white p-6 border border-zinc-200 shadow-sm mb-12 w-full max-w-sm">
+                    <div className="flex justify-between items-center">
+                        <span className="text-xs text-zinc-500 font-mono uppercase tracking-widest">ID de Sesión</span>
+                        <span className="text-sm text-zinc-950 font-mono font-bold tracking-widest">
                             {proformaId?.substring(0, 8) || "XXXX"}
                         </span>
                     </div>
