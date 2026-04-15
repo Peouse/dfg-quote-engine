@@ -30,7 +30,7 @@ const products = (records as Record<string, string>[]).map((record, index: numbe
         id: `p${index + 1}`,
         oemCode: record['OEM CODE'] || '',
         description: record['DESCRIPCIÓN'] || '',
-        family: record['FAMILIA'] || 'Other',
+        family: record['FAMILIA'] || record['FAMILA'] || 'Other',
         subfamily: record['SUBFAMILIA'] || '',
         linea: record['LINEA'] || '',
         aplicacion: record['APLICACION'] || '',

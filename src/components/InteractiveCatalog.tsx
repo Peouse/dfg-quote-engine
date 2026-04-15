@@ -31,6 +31,7 @@ export default function InteractiveCatalog() {
         setActiveFamily(FAMILIES[0]);
         setActiveSubfamily(null);
         setSearchQuery("");
+        window.scrollTo(0, 0);
         if (scrollRef.current) scrollRef.current.scrollTop = 0;
     }, []);
 
@@ -228,15 +229,35 @@ export default function InteractiveCatalog() {
                         </div>
                     </div>
                     {!searchQuery && (
-                        <div className="text-[10px] sm:text-xs font-mono text-zinc-500 flex items-center gap-x-2 gap-y-1 uppercase tracking-widest mt-1 sm:mt-0 min-w-0 w-full overflow-hidden">
+                        <div className="text-[10px] sm:text-xs font-mono flex items-center gap-x-2 gap-y-1 uppercase tracking-widest mt-1 sm:mt-0 min-w-0 w-full overflow-hidden">
                             <Database size={12} className="text-blue-500 shrink-0" />
-                            <span className="shrink-0">Catalog</span>
+                            <button 
+                                onClick={() => { setActiveFamily(FAMILIES[0]); setActiveSubfamily(null); }}
+                                className="text-zinc-500 hover:text-zinc-800 transition-colors shrink-0"
+                            >
+                                Catalog
+                            </button>
+                            
                             <span className="text-gray-700 shrink-0">/</span>
-                            <span className={`truncate min-w-0 shrink ${!activeSubfamily ? "text-gray-300" : ""}`}>{activeFamily}</span>
+                            
+                            <button 
+                                onClick={() => setActiveSubfamily(null)}
+                                className={`truncate min-w-0 shrink transition-colors ${
+                                    !activeSubfamily 
+                                        ? "text-gray-400 cursor-default" 
+                                        : "text-zinc-500 hover:text-zinc-800 hover:underline"
+                                }`}
+                                disabled={!activeSubfamily}
+                            >
+                                {activeFamily}
+                            </button>
+
                             {activeSubfamily && (
                                 <>
                                     <span className="text-gray-700 shrink-0">/</span>
-                                    <span className="text-blue-400 truncate min-w-0 shrink">{activeSubfamily}</span>
+                                    <span className="text-blue-500 font-semibold truncate min-w-0 shrink cursor-default">
+                                        {activeSubfamily}
+                                    </span>
                                 </>
                             )}
                         </div>
