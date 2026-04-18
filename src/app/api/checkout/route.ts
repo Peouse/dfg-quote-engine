@@ -171,8 +171,14 @@ export async function POST(req: Request) {
                 attachments
             };
 
-            await transporter.sendMail(mailOptions);
-            console.log(`[Sales Integration] Triggered automated email to peouse@gmail.com and ${leadData.email}`);
+            try {
+                await transporter.sendMail(mailOptions);
+                console.log(`[Sales Integration] Triggered automated email to peouse@gmail.com and ${leadData.email}`);
+            } catch (emailError) {
+                console.error("[Sales Integration] FATAL Email Sending Error:", emailError);
+                // Re-throwing the error to intentionally crash the checkout as requested
+                throw emailError;
+            }
         } else {
             console.warn("[Sales Integration] SMTP credentials not configured. Please add SMTP_EMAIL and SMTP_PASSWORD to .env.local to enable emails.");
         }
