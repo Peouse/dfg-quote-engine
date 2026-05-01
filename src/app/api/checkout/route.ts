@@ -143,7 +143,7 @@ export async function POST(req: Request) {
 
             const mailOptions = {
                 from: process.env.SMTP_EMAIL,
-                to: ["peouse@gmail.com", leadData.email],
+                to: [process.env.SMTP_EMAIL as string, leadData.email],
                 subject: `🚨 NUEVO LEAD EN FERIA: ${leadData.company} - Proforma #${quote.id.substring(0, 8)}`,
                 html: `
 <p>Hola Equipo Comercial,</p>
@@ -173,7 +173,7 @@ export async function POST(req: Request) {
 
             try {
                 await transporter.sendMail(mailOptions);
-                console.log(`[Sales Integration] Triggered automated email to peouse@gmail.com and ${leadData.email}`);
+                console.log(`[Sales Integration] Triggered automated email to ${process.env.SMTP_EMAIL} and ${leadData.email}`);
             } catch (emailError) {
                 console.error("[Sales Integration] FATAL Email Sending Error:", emailError);
                 // Re-throwing the error to intentionally crash the checkout as requested
