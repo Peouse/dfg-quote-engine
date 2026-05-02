@@ -238,6 +238,9 @@ export default function LeadCapture() {
                                     >
                                         <option value="+1">🇺🇸 +1</option>
                                         <option value="+51">🇵🇪 +51</option>
+                                        <option value="+56">🇨🇱 +56</option>
+                                        <option value="+57">🇨🇴 +57</option>
+                                        <option value="+593">🇪🇨 +593</option>
                                     </select>
                                     <div className="relative flex-1">
                                         <input
