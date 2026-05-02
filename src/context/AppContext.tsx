@@ -55,10 +55,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
       const existing = prev.find((i) => i.id === item.id);
       if (existing) {
         return prev.map((i) =>
-          i.id === item.id ? { ...i, quantity: i.quantity + 10 } : i
+          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
         );
       }
-      return [...prev, { ...item, quantity: 10 }];
+      return [...prev, { ...item, quantity: 1 }];
     });
   };
 

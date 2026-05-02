@@ -367,17 +367,17 @@ export default function InteractiveCatalog() {
                                                     >
                                                         <motion.button
                                                             whileTap={{ scale: 0.9 }}
-                                                            onClick={() => updateQuantity(product.id, -10)}
+                                                            onClick={() => updateQuantity(product.id, -1)}
                                                             className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center text-blue-600 hover:bg-blue-200/80 hover:text-blue-800 rounded-full transition-colors shrink-0"
                                                         >
                                                             <Minus size={14} />
                                                         </motion.button>
                                                         <div className="min-w-[16px] sm:min-w-[24px] text-center font-mono text-[11px] sm:text-xs font-bold text-blue-900 pointer-events-none shrink-0">
-                                                            {cart.find(i => i.id === product.id)?.quantity || 10}
+                                                            {cart.find(i => i.id === product.id)?.quantity || 1}
                                                         </div>
                                                         <motion.button
                                                             whileTap={{ scale: 0.9 }}
-                                                            onClick={() => updateQuantity(product.id, 10)}
+                                                            onClick={() => updateQuantity(product.id, 1)}
                                                             className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center text-blue-600 hover:bg-blue-200/80 hover:text-blue-800 rounded-full transition-colors shrink-0"
                                                         >
                                                             <Plus size={14} />
