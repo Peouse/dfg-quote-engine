@@ -26,15 +26,20 @@ const products = (records as Record<string, string>[]).map((record, index: numbe
         return link; // Return as-is if it's already a direct link or different format
     });
 
+    const overallRank = parseInt(record['overall_volume_rank'], 10);
+    const categoryRank = parseInt(record['category_volume_rank'], 10);
+
     return {
         id: `p${index + 1}`,
         oemCode: record['OEM CODE'] || '',
         description: record['DESCRIPCIÓN'] || '',
-        family: record['FAMILIA'] || record['FAMILA'] || 'Other',
+        family: record['FAMILIA'] || 'Other',
         subfamily: record['SUBFAMILIA'] || '',
         linea: record['LINEA'] || '',
         aplicacion: record['APLICACION'] || '',
-        images: processedImages
+        images: processedImages,
+        overallVolumeRank: isNaN(overallRank) ? 999999 : overallRank,
+        categoryVolumeRank: isNaN(categoryRank) ? 999999 : categoryRank
     };
 });
 
@@ -50,6 +55,8 @@ export interface Product {
   linea: string;
   aplicacion: string;
   images: string[];
+  overallVolumeRank: number;
+  categoryVolumeRank: number;
 }
 
 export const FAMILIES = ${JSON.stringify(families, null, 2)};

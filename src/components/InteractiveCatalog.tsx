@@ -11,7 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 export default function InteractiveCatalog() {
     const { setCurrentStep, cart, addToCart, removeFromCart, updateQuantity } = useAppContext();
 
-    const [activeFamily, setActiveFamily] = useState<string>(FAMILIES[0]);
+    const [activeFamily, setActiveFamily] = useState<string>("TOP_30");
     const [activeSubfamily, setActiveSubfamily] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -28,7 +28,7 @@ export default function InteractiveCatalog() {
     // Force reset on mount just in case of stale state
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
-        setActiveFamily(FAMILIES[0]);
+        setActiveFamily("TOP_30");
         setActiveSubfamily(null);
         setSearchQuery("");
         window.scrollTo(0, 0);
@@ -48,13 +48,19 @@ export default function InteractiveCatalog() {
     // Filter products: If searching, show search results. Otherwise, filter by active family.
     const displayedProducts = useMemo(() => {
         if (searchQuery.trim()) {
-            return fuse.search(searchQuery).map(res => res.item);
+            return fuse.search(searchQuery).map(res => res.item)
+                .sort((a, b) => a.overallVolumeRank - b.overallVolumeRank);
+        }
+        if (activeFamily === "TOP_30") {
+            return MOCK_PRODUCTS
+                .filter(p => p.overallVolumeRank <= 30)
+                .sort((a, b) => a.overallVolumeRank - b.overallVolumeRank);
         }
         let filtered = MOCK_PRODUCTS.filter(p => p.family === activeFamily);
         if (activeSubfamily) {
             filtered = filtered.filter(p => p.subfamily === activeSubfamily);
         }
-        return filtered;
+        return filtered.sort((a, b) => a.categoryVolumeRank - b.categoryVolumeRank);
     }, [searchQuery, activeFamily, activeSubfamily, fuse]);
 
     const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
@@ -74,6 +80,17 @@ export default function InteractiveCatalog() {
                     <img src="/logo.png" alt="DFG Logo" className="h-8 object-contain" />
                 </div>
                 <div className="flex-1 overflow-y-auto w-full no-scrollbar py-4">
+                    <div className="px-2 mb-4">
+                        <button
+                            onClick={() => { setActiveFamily("TOP_30"); setActiveSubfamily(null); setSearchQuery(""); }}
+                            className={`w-full text-left px-4 py-3 text-sm font-mono tracking-wide transition-all border-l-2 font-bold ${activeFamily === "TOP_30" && !searchQuery
+                                ? "bg-amber-500/10 text-amber-600 border-amber-500"
+                                : "text-zinc-700 border-transparent hover:bg-zinc-100 hover:text-zinc-900"
+                                }`}
+                        >
+                            ⭐ TOP 30 BESTSELLERS
+                        </button>
+                    </div>
                     {FAMILIES.map(family => (
                         <div key={family} className="px-2 mb-1">
                             <button
@@ -135,6 +152,22 @@ export default function InteractiveCatalog() {
                                 <button onClick={() => setIsDrawerOpen(false)} className="absolute right-4 p-2 text-zinc-500 hover:text-zinc-900"><X size={24} /></button>
                             </div>
                             <div className="flex-1 overflow-y-auto py-4">
+                                <div className="mb-4">
+                                    <button
+                                        onClick={() => {
+                                            setActiveFamily("TOP_30");
+                                            setActiveSubfamily(null);
+                                            setSearchQuery("");
+                                            setIsDrawerOpen(false);
+                                        }}
+                                        className={`w-full text-left px-6 py-4 text-sm font-mono tracking-wide border-l-2 font-bold ${activeFamily === "TOP_30" && !searchQuery
+                                            ? "bg-amber-500/10 text-amber-600 border-amber-500"
+                                            : "text-zinc-700 border-transparent active:bg-zinc-100"
+                                            }`}
+                                    >
+                                        ⭐ TOP 30 BESTSELLERS
+                                    </button>
+                                </div>
                                 {FAMILIES.map(family => {
                                     const familySubcategories = Array.from(new Set(MOCK_PRODUCTS.filter(p => p.family === family).map(p => p.subfamily))).filter(Boolean);
 
@@ -232,7 +265,7 @@ export default function InteractiveCatalog() {
                         <div className="text-[10px] sm:text-xs font-mono flex items-center gap-x-2 gap-y-1 uppercase tracking-widest mt-1 sm:mt-0 min-w-0 w-full overflow-hidden">
                             <Database size={12} className="text-blue-500 shrink-0" />
                             <button 
-                                onClick={() => { setActiveFamily(FAMILIES[0]); setActiveSubfamily(null); }}
+                                onClick={() => { setActiveFamily("TOP_30"); setActiveSubfamily(null); }}
                                 className="text-zinc-500 hover:text-zinc-800 transition-colors shrink-0"
                             >
                                 Catalog
@@ -249,7 +282,7 @@ export default function InteractiveCatalog() {
                                 }`}
                                 disabled={!activeSubfamily}
                             >
-                                {activeFamily}
+                                {activeFamily === "TOP_30" ? "TOP 30 BESTSELLERS" : activeFamily}
                             </button>
 
                             {activeSubfamily && (
