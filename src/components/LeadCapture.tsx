@@ -51,7 +51,7 @@ export default function LeadCapture() {
     const [formData, setFormData] = useState({
         fullName: leadData.fullName,
         company: leadData.company,
-        countryCode: "+1",
+        countryCode: "+51",
         whatsapp: leadData.whatsapp.replace(/^\+\d+\s?/, ""), // naive strip for display
         email: leadData.email,
         profileTag: leadData.profileTag,
