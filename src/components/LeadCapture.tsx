@@ -236,11 +236,21 @@ export default function LeadCapture() {
                                         onChange={(e) => setFormData({ ...formData, countryCode: e.target.value })}
                                         className={`w-28 h-10 bg-transparent border-none ${errors.whatsapp ? 'text-red-500' : 'text-zinc-950'} focus:ring-0 font-mono text-base sm:text-sm px-0 outline-none cursor-pointer`}
                                     >
-                                        <option value="+1">🇺🇸 +1</option>
                                         <option value="+51">🇵🇪 +51</option>
                                         <option value="+56">🇨🇱 +56</option>
                                         <option value="+57">🇨🇴 +57</option>
                                         <option value="+593">🇪🇨 +593</option>
+                                        <option value="+86">🇨🇳 +86</option>
+                                        <option value="+90">🇹🇷 +90</option>
+                                        <option value="+1">🇺🇸 +1</option>
+                                        <option value="+501">🇧🇿 +501</option>
+                                        <option value="+502">🇬🇹 +502</option>
+                                        <option value="+503">🇸🇻 +503</option>
+                                        <option value="+504">🇭🇳 +504</option>
+                                        <option value="+505">🇳🇮 +505</option>
+                                        <option value="+506">🇨🇷 +506</option>
+                                        <option value="+507">🇵🇦 +507</option>
+                                        <option value="">🌍 Other</option>
                                     </select>
                                     <div className="relative flex-1">
                                         <input
@@ -313,7 +323,7 @@ export default function LeadCapture() {
                         {/* Interest Tags */}
                         <div className="pt-4 border-t border-zinc-200 relative">
                             <label className={`block flex items-center justify-between text-xs font-mono mb-4 uppercase tracking-wider transition-colors ${errors.interestTags ? 'text-red-500 font-bold' : 'text-zinc-500'}`}>
-                                Vectores de Interés
+                                Línea de Interés
                                 <AnimatePresence>
                                     {errors.interestTags && (
                                         <motion.span
